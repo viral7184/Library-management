@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8624448107fa4929a6a1a4a4a8138b70" Name="Diagram1">
+        <EntityTypeShape EntityType="library_m_Database1Model.book" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="library_m_Database1Model.department" Width="1.5" PointX="1.5" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="library_m_Database1Model.issue_book" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="library_m_Database1Model.registration" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="library_m_Database1Model.request_book" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="library_m_Database1Model.user_role" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <AssociationConnector Association="library_m_Database1Model.FK_book_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="library_m_Database1Model.FK_issue_book_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="library_m_Database1Model.FK_issue_book_ToTable_1" ManuallyRouted="false" />
+        <AssociationConnector Association="library_m_Database1Model.FK_user_role_ToTable" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

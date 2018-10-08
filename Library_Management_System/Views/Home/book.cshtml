@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "book";
+}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Book Details</h4>
+            </div>
+            <div class="modal-body">
+                <!-- /.box-header -->
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                    <div class="form-group ">
+                        <label>Book name</label>
+                        <input type="text" class="form-control" name="BOOK_NAME" required id="BOOK_NAME" placeholder="Enter Book Name">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    <div class="form-group ">
+                        <label>Author name</label>
+                        <input type="text" class="form-control" name="AUTHOR_NAME" id="AUTHOR_NAME" placeholder="Enter Author Name">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    <div class="form-group ">
+                        <label>Genre</label>
+                        
+                        <select name="GENRE" id="genre" required class="form-control select2" dir="ltr" style="width: 100%;">
+                            @*<option value="0">Select Member</option>*@
+                            @foreach (var item in ViewBag.genre)
+                            {
+                                <option value="@item.ID">@item.DEPARTMENT_NAME</option>
+                            }
+                        </select>
+
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    <div class="form-group ">
+                        <label>Language</label>
+                        <input type="text" class="form-control" name="LANGUAGE" id="language" placeholder="Enter Book language">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    <div class="form-group ">
+                        <label>Submitted By</label>
+                        <input type="text" class="form-control" name="SUBMITTED_BY" id="submitted_by" placeholder="Enter Submitted By">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    @*<div class="form-group ">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control" name="QUANTITY" id="QUANTITY" placeholder="Enter Quantity no">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>*@
+                    @*<div class="form-group ">
+                        <div class="form-group">
+                            <label style="float:left">Available</label>
+                            <div class="radio">
+                                <label style="margin-left:12px">
+                                    <input type="radio" name="AVAILABLE" value="Yes" id="optionsRadios1" checked> Yes
+                                </label>
+                                <label style="margin-left: 10px">
+                                    <input type="radio" name="AVAILABLE" value="No" id="optionsRadios2"> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>*@
+                  
+                    <div class="box-footer">
+                        <input type="hidden" id="hdnid" name="ID" />
+                        <input type="submit" class="btn btn-success pull-right" id="add" value="Add Book" />
+                        <input type="submit" class="btn btn-success pull-right hidden" id="update" value="Update Book" />
+                    </div>
+                </form>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box-header">
+    <h3 class="box-title">Book details</h3>
+    <a data-toggle="modal" data-target="#myModal" onclick="OpenDialog2()" data-dismiss="modal" type="button" class="btn btn-primary hide_me" style="float: right;">Add New Book</a>
+</div>
+<div>
+    <table id="example" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Sr no</th>
+                <th>Book Name</th>
+                <th>Book code</th>
+                <th>Author name</th>
+                <th>Book Status</th>
+                <th>Genre</th>
+                <th>Language</th>
+                <th>Submitted By</th>
+                @*<td>Price</td>
+                <td>Quantity</td>
+                <td>Available</td>*@
+                <th class="hide_me">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var i = 1;}
+            @foreach (var item in ViewBag.book)
+            {
+                <tr id="row_@item.ID">
+                    <td>@i</td>
+                    <td>
+                        @item.BOOK_NAME                       
+                    </td>
+                    <td>
+                        @item.BOOK_CODE
+                    </td>
+                    <td>
+                        @item.AUTHOR_NAME
+                    </td>
+                   <td>
+                       @if (item.AVAILABLE == "No")
+                       {
+                           <span style="text-align:right;color:red">issue</span>
+                       }
+                   </td>
+                    <td>
+                        @item.department.DEPARTMENT_NAME
+                    </td>
+                    <td>
+                        @item.LANGUAGE
+                    </td>
+                    <td>
+                        @item.SUBMITTED_BY
+                    </td>
+                    @*<td>
+                        @item.PRICE
+                    </td>
+                    <td>
+                        @item.QUANTITY
+                    </td>
+                    <td id="available_@item.ID">
+                        @item.AVAILABLE
+                    </td>*@
+                    <td class="hide_me">
+                        <a onclick="OpenDialog(@item.ID)" style="display:inline" data-toggle="modal" data-target="#myModal" type="button"> <i class="fa fa-edit"></i></a>
+                        <a style="display:inline" class="hide_me" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash"></i> </a>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');
+            $('#logoid').addClass('hidden');
+            $('#update').addClass('hidden');
+        }
+</script>
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+        $('#logoid').addClass('hidden');
+        $('#update').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getbook/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#hdnid').val(data.data.ID);
+                $('#BOOK_NAME').val(data.data.BOOK_NAME);
+                $('#AUTHOR_NAME').val(data.data.AUTHOR_NAME);
+                $('#BOOK_CODE').val(data.data.BOOK_CODE);
+                var user1 = data.data.genre;
+                $('#genre option[value="' + user1 + '"]').prop("selected", "selected").change();
+
+                $('#genre').val(data.data.GENRE)
+                $('#language').val(data.data.LANGUAGE);
+                $('#submitted_by').val(data.data.SUBMITTED_BY);
+                //$('#PRICE').val(data.data.PRICE);
+                //$('#QUANTITY').val(data.data.QUANTITY);
+
+                //var isavailable = $('#available_' + id).text().trim();
+                //if (isavailable == "Yes") {
+                //   // $('input:radio[name=AVAILABLE]')[0].checked = true;
+                //    $('#optionsRadios1').prop('checked', true);
+                //}
+                //else {
+                //  //  $('input:radio[name=AVAILABLE]')[1].checked = true;
+                //    $('#optionsRadios2').prop('checked', true);
+                //}
+
+               // $('#AVAILABLE').val(data.data.AVAILABLE);
+            }
+        });
+    }
+</script>
+
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       book_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.stringify(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var dt = data.data.ID;
+                                $('#row_'+dt).hide();
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>
+<script src="~/Scripts/plugins/greeter.js"></script>
+

@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewBag.Title = "user_role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="">
+   
+    <!-- Modal -->
+    <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">User Role</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- /.box-header -->
+                    <form role="form" method="post" id="myForm">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label>User Name <span class="error"> * </span></label>
+                            <select name="USER_ID" id="user_id" required class="form-control select2" dir="ltr" style="width: 100%;">
+                                @*<option value="0">Select Member</option>*@
+                                @foreach (var item in ViewBag.member)
+                                {
+                                    <option value="@item.ID">@item.NAME</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label>Role<span class="error"> * </span></label>
+                            <select name="USER_ROLE1" id="user_role" required class="form-control select2-container select2-container--default" dir="ltr" style="width: 100%;">
+                                <option value="0">Select Member Role</option>
+                                <option>Admin</option>
+                                <option>Employee</option>
+                            </select>
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                        <div class="box-footer">
+                            <input type="hidden" id="hdnid" name="ID" />
+                            <input type="submit" class="btn btn-success pull-right" id="add" value="Add User Role" />
+                            <input type="submit" class="btn btn-success pull-right hidden" id="update" value="Update User Role" />
+                        </div>
+                    </form>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    <!-- Info boxes -->
+    <div class="box">
+       
+        <!-- /.box-header -->
+        <div class="box-body" style="overflow-x: scroll;">
+            <table id="example" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="fileTable_info">
+                <thead>
+                    <tr>
+                        <th>SrNo</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th class="hide_me">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int i = 1;}
+                    @foreach (var item in ViewBag.role)
+                    {
+                        <tr id="row_@item.ID">
+                            <td>
+                                <span>@i</span>
+                            </td>
+                            <td>
+                               @item.registration.NAME
+                            </td>
+                            <td>
+                                @if(item.USER_ROLE1 != null)
+                                {
+                                @item.USER_ROLE1
+                                }
+                            </td>
+                            <td class="hide_me">
+                                <a href="" onclick="OpenDialog(@item.ID)" data-toggle="modal" data-target="#myModal" type="button">&nbsp; <i class="fa fa-edit"></i></a>
+                                <a style="display:inline" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash"></i> </a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+
+
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');          
+            $('#update').addClass('hidden');
+        }
+</script>
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+        $('#logoid').addClass('hidden');
+        $('#update').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getuser_role/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#hdnid').val(data.data.ID);
+             //   $('#BOOK_NAME').val(data.data.BOOK_NAME);
+                var user1 = data.data.userid;
+               
+                //   $("#department_name").append('<option selected style="color:black;" value="' + user1 + '">' + user2 + '</option>')
+                $('#user_id option[value="' + user1 + '"]').prop("selected", "selected").change();
+              
+                $('#user_role').val(data.data.USER_ROLE1)
+            }
+        });
+    }
+</script>
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       user_role_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.toString(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+
+                            var dt = data.data.ID;
+                          
+                            $('#row_' + dt).hide();
+
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>
+
+

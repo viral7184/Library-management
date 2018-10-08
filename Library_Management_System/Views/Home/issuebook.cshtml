@@ -1,0 +1,283 @@
+﻿@{
+    ViewBag.Title = "issuebook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Issue Book</h4>
+            </div>
+            <div class="modal-body">
+                <!-- /.box-header -->
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                        <div class="form-group">
+                            <label>User Name</label>
+
+                            <select name="USER_ID" id="user_id" class="form-control select2" dir="ltr" style="width: 100%;">
+                                @*<option selected value="17">SELF</option>*@
+                                @foreach (var item in ViewBag.regist)
+                                {
+                                    <option value="@item.ID">@item.NAME</option>
+                                }
+                            </select>
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+
+                        <div class="form-group">
+                            <label>Issue Book</label>
+                            <select name="BOOK_ID" class="form-control select2" id="book_id" dir="ltr" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                @*<option selected value="17">SELF</option>*@
+                                
+                                @foreach (var item in ViewBag.book)
+                                {
+                                    <option value="@item.ID">@item.BOOK_NAME - @item.BOOK_CODE</option>
+                                }
+                            </select>                                                      
+                           
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+
+                 
+                    
+                   
+                        <div class="form-group">
+                            <label>Issue Date</label>
+                            <input type="text" class="form-control" name="ISSUE_DATE" id="issue_date"  placeholder="Enter date" autocomplete="off">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                        @*<div class="form-group col-sm-6">
+                            <label>Expiry Date</label>
+                            <input type="text" class="form-control" name="EXPIRY_DATE" id="expiry_date" required placeholder="Enter date" autocomplete="off">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>*@
+
+                   
+
+                    @*<div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Fees</label>
+                            <input type="number" class="form-control" name="FEES" id="fees" placeholder="Enter Fees">
+                         
+                        </div>                      
+                    </div>*@
+
+
+                    <div class="box-footer">
+                        <input type="hidden" id="hdnid" name="ID" />
+                       
+                        <input type="submit" class="btn btn-success pull-right" id="add"  value="Add Issue-book" />
+                        <input type="submit" class="btn btn-success pull-right hidden" id="hide" value="Update Issue-book" />
+                    </div>
+                </form>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="box-header">
+    @*<h3 class="box-title">Register</h3>*@
+    <a data-toggle="modal" data-target="#myModal" onclick="OpenDialog2()" data-dismiss="modal" type="button" class="btn btn-primary hide_me" style="float: right;">Issue-Book</a>
+</div>  
+@if(TempData["issuebook"] !=null)
+{ 
+<span style="color:red;margin-left:360px">@TempData["issuebook"]</span>
+}
+<div>
+    <table id="example" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Sr No</td>
+                <td>User Name</td>
+                <td>Book Name</td>                
+                <td>Issue Date</td>
+                <td>Expiry date</td>
+                <td class="hide_me">Return Book</td>
+                <td>Delay Charges</td>                
+                @*<td class="hide_me" >Action</td>*@
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in ViewBag.issuebook)
+            {
+
+                <tr id="row_@item.ID">
+                    <td>
+                        @i
+                    </td>
+
+                    <td>
+                        @item.registration.NAME
+                     
+                    </td>
+                    <td>
+                        @item.book.BOOK_NAME - @item.book.BOOK_CODE
+
+                    </td>
+                   
+                    <td>
+                        @if(item.ISSUE_DATE !=null)
+                        { 
+                        @item.ISSUE_DATE.ToShortDateString()
+                        }
+                    </td>
+                    <td>
+                        @if(item.EXPIRY_DATE !=null)
+                        { 
+                        @item.EXPIRY_DATE.ToShortDateString()
+                        }
+                    </td>
+                    <td class="hide_me">
+                        <a href="~/Home/returnbook1/@item.ID"><input type="button" name="IS_RETURN" value="Return-Book" class="form-control btn btn-primary" /></a>
+                    </td>
+
+                    <td>
+                        @item.DELAY_CHARGES 
+                    </td>                    
+                    @*<td class="hide_me">
+                        <a onclick="OpenDialog(@item.ID)" style="display:inline" data-toggle="modal" data-target="#myModal" type="button"> <i class="fa fa-edit"></i></a>
+                        <a style="display:inline" class="hide_me" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash"></i> </a>
+                    </td>*@
+                </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .dropdown-menu {
+        z-index: 1100;
+    }
+</style>
+<script src="~/Content/bootstrap-datepicker.js"></script>
+
+<script>
+    $('#issue_date,#expiry_date').datepicker({
+        format: 'dd/mm/yyyy'
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+       
+    });
+</script>
+
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');
+            $('#logoid').addClass('hidden');
+            $('#hide').addClass('hidden');
+
+        }
+</script>
+@*<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>*@
+<script src="~/Scripts/moment.min.js"></script>
+
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+        $('#logoid').addClass('hidden');
+        $('#hide').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getissuebook/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#hdnid').val(data.data.id);
+                //$('#book_id').val(data.data.book);
+                var user1 = data.data.userid;
+                var user2 = data.data.username;                
+                $("#user_id").append('<option selected style="color:black;" value="' + user1 + '">' + user2 + '</option>')
+
+                var text1 = data.data.bookid;
+                var text2 = data.data.book;
+                $("#book_id").append('<option selected style="color:black;" value="' + text1 + '">' + text2 + '</option>')
+
+              
+                    var issuedate = moment(data.data.issuedate).format("DD/MM/YYYY"); //json string               
+                    $('#issue_date').val(issuedate);
+                var expiry = moment(data.data.expirydate).format("DD/MM/YYYY"); //json string               
+                $('#expiry_date').val(expiry);
+                $('#fees').val(data.data.fees);
+              //  $('#user_id').val(data.data.userid);
+             
+
+
+
+            }
+        });
+    }
+</script>
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       issuebook_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.stringify(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var dt = data.data.ID;
+
+                                $('#row_'+dt).hide();
+
+
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>
+
+
+@*<script>
+        function openfolder(id)
+        {
+            var values =
+               {
+                   ID : id,
+               };
+            {
+                $.ajax({
+                    url: '/Home/openfolder/',
+                    data: JSON.stringify(values),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (result) {
+
+                    }
+                });
+            }
+        }
+</script>*@

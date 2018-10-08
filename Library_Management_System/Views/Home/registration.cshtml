@@ -1,0 +1,311 @@
+﻿
+@{
+    ViewBag.Title = "registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <style>
+        .field-icon {
+            padding-right: 25px;
+            float: right;
+            margin-left: -25px;
+            margin-top: -25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            padding-top: 50px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Registraion</h4>
+            </div>
+            <div class="modal-body">
+                <!-- /.box-header -->
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                    <div class="row">
+                       
+                            <div class="form-group col-sm-6 ">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="NAME" id="name" required placeholder="Enter Name">
+                                <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                            </div>
+
+                        <div class="form-group col-sm-6">
+                            <label>Phone no</label>
+                            <input type="text" class="form-control" onkeypress="phoneno()"  maxlength="12"  name="PHONE_NO" id="phone_no" placeholder="Enter phone no">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>      
+                    </div>                    
+
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="EMAIL" id="email" required placeholder="Enter Email">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="PASSWORD" id="password" required placeholder="Enter password">
+                            <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Registration Fee</label>
+                        <input type="text" class="form-control" name="FEES" id="fees" required placeholder="Enter Fees">
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>
+                    @*<div class="form-group ">
+                        <label>Address</label>
+                        <textarea class="form-control" name="ADDRESS" id="address" placeholder="Enter Address"></textarea>
+                        <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                    </div>*@
+                    
+                    @*<div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Catogery</label>
+                            <select name="DEPARTMENT_ID" id="department_name" class="form-control select2" dir="ltr" style="width: 100%;">
+                                <option selected value="17">SELF</option>
+                                @foreach (var item in ViewBag.department)
+                                {
+                                    <option value="@item.ID">@item.DEPARTMENT_NAME</option>
+                                }
+                            </select>
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <label>Entry date</label>
+                            <input type="text" class="form-control" name="ENT_DATE" id="ent_date" placeholder="Enter Date">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                    </div>*@
+
+
+                    <div class="box-footer">
+                        <input type="hidden" id="hdnid" name="ID" />
+                        <input type="submit" class="btn btn-success pull-right" id="add" value="Add Registration" />
+                        <input type="submit" class="btn btn-success pull-right hidden" id="hide" value="Update Registration" />
+                    </div>
+                </form>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+<div class="box-header">
+    @*<h3 class="box-title">Register</h3>*@
+    <a data-toggle="modal" data-target="#myModal" onclick="OpenDialog2()" data-dismiss="modal" type="button" class="btn btn-primary hide_me" style="float: right;">New Registration</a>
+</div>
+@if(TempData["email"] !=null)
+{ 
+<span style="color:red;margin-left:360px">@TempData["email"]</span>
+}
+<div>
+    <table id="example" class="table table-bordered table-striped" >
+        <thead>
+            <tr>
+                <th class="hide_me">Action</th> 
+                <th>Sr No</th>
+                <th>Name</th>
+                <th>Email</th>
+              
+                <th>Phone no</th>
+                <th>Registation Fees</th>               
+                <th>Entry Date</th>              
+                <th>Renew Date</th>               
+                <th class="hide_me">Renew Membership</th>                
+                
+            </tr>
+        </thead>    
+        <tbody> 
+            @{int i = 1;}
+               @foreach (var item in ViewBag.register)
+               {
+
+                <tr id="row_@item.ID">
+                    <td class="hide_me">
+                        <a onclick="OpenDialog(@item.ID)" style="display:inline" data-toggle="modal" data-target="#myModal" type="button"> <i class="fa fa-edit"></i></a>
+                        <a style="display:inline" class="hide_me" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash"></i> </a>
+                    </td>
+                    <td>
+                        @i  
+                    </td>
+                    <td>
+                        @item.NAME
+                    </td>
+                    <td>
+                        @item.EMAIL
+                    </td>
+                  
+                    <td>
+                        @item.PHONE_NO
+                    </td>
+                    <td>
+                        @item.FEES
+                    </td>
+                  
+                    <td>
+                        @if(item.ENT_DATE !=null)
+                        { 
+                        @item.ENT_DATE.ToShortDateString()
+                        }
+                    </td>                   
+
+                    <td>
+                         @if (item.RENEW_DATE != null)
+                         {
+                        @item.RENEW_DATE.ToShortDateString()
+                         }
+                    </td>
+                  
+                    <td class="hide_me">
+                        @if (item.RENEW_DATE <= DateTime.Now)
+                        {
+                            <a href="~/Home/renewbook/@item.ID"><input type="button" class="form-control" value="renew" /></a>
+                        }
+                    </td>
+                 
+                   
+                </tr>
+                   i++;
+               }
+               
+        </tbody>
+    </table>
+</div>
+
+<style> 
+     .dropdown-menu{
+            z-index: 1100;
+        }
+</style>
+<script src="~/Content/bootstrap-datepicker.js"></script>
+
+<script>
+    $('#ent_date').datepicker({
+        format: 'dd/mm/yyyy'
+    });
+
+    function phoneno() {
+        $('#phone_no').keypress(function (e) {
+            var a = [];
+            var k = e.which;
+
+            for (i = 48; i < 58; i++)
+                a.push(i);
+
+            if (!(a.indexOf(k) >= 0))
+                e.preventDefault();
+        });
+    }
+   
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+    $(".toggle-password").click(function () {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
+
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');
+            $('#logoid').addClass('hidden');
+            $('#hide').addClass('hidden');
+
+        }
+</script>
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+        $('#logoid').addClass('hidden');
+        $('#hide').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getregistration/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#hdnid').val(data.data.ID);
+                $('#name').val(data.data.NAME);
+                $('#email').val(data.data.EMAIL );
+                $('#password').val(data.data.PASSWORD);
+                $('#address').val(data.data.ADDRESS);
+                $('#phone_no').val(data.data.PHONE_NO);
+               $('#fees').val(data.data.FEES);
+               var user1 = data.data.d_id;
+                var user2 = data.data.d_name;
+             //   $("#department_name").append('<option selected style="color:black;" value="' + user1 + '">' + user2 + '</option>')
+              $('#department_name option[value="' + user1 + '"]').prop("selected", "selected").change();
+             // $('#department_name').find('option[value="' + user1 + '"]').attr('selected', 'selected');
+
+            }
+        });
+    }
+</script>
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       registration_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.stringify(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var dt = data.data.ID;
+                          
+                                $('#row_'+dt).hide();
+
+
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>

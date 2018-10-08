@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Issue-History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <table id="example" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Sr No</td>
+                <td>Name</td>
+                <td>Book Name</td>
+                <td>Expiry Date</td>
+                <td>Return Date</td>             
+                <td>Delay Charge</td>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in ViewBag.returnbook)
+            {
+
+                <tr id="row_@item.ID">
+                    <td>
+                        @i
+                    </td>
+
+                    <td>
+                        @item.registration.NAME
+                    </td>
+                    <td>
+                        @item.book.BOOK_NAME - @item.book.BOOK_CODE 
+
+                    </td>
+                    <td>
+                        @if (item.EXPIRY_DATE != null)
+                        {
+                            @item.EXPIRY_DATE.ToShortDateString()
+                        }
+                    </td>
+                    <td>
+                        @if (item.RETURN_DATE != null)
+                        {
+                            @item.RETURN_DATE.ToShortDateString()
+                        }
+                    </td>
+                    <td>
+                       @item.DELAY_CHARGES
+                    </td>
+                                     
+                   
+                </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>

@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "Catogery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                @*<h4 class="modal-title" id="myModalLabel">Catogery</h4>*@
+            </div>
+            <div class="modal-body">
+                <!-- /.box-header -->
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                 
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Catogery</label>
+                            <input type="text" class="form-control" name="DEPARTMENT_NAME" id="department_name" required placeholder="Enter Catogery" autocomplete="off">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>                      
+
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="hidden" id="hdnid" name="ID" />
+                        <input type="submit" class="btn btn-success pull-right" id="add" value="Add Catogery" />
+                        <input type="submit" class="btn btn-success pull-right hidden" id="hide" value="Update Catogery" />
+                    </div>
+                </form>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="box-header">
+    @*<h3 class="box-title">Register</h3>*@
+    <a data-toggle="modal" data-target="#myModal" onclick="OpenDialog2()" data-dismiss="modal" type="button" class="btn btn-primary hide_me" style="float: right;">Add Catogery</a>
+</div>
+
+<div>
+    <table id="example" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Sr No</td>
+                <td>Catogery Name</td>             
+                <td class="hide_me">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in ViewBag.department)
+            {
+                <tr id="row_@item.ID">
+                    <td>
+                        @i
+                    </td>
+
+                    <td>
+                        @item.DEPARTMENT_NAME
+                    </td>
+                   
+                   
+                   
+                    <td class="hide_me">
+                        <a onclick="OpenDialog(@item.ID)" style="display:inline" data-toggle="modal" data-target="#myModal" type="button"> <i class="fa fa-edit"></i></a>
+                        <a style="display:inline" class="hide_me" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash"></i> </a>
+                    </td>
+                </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .dropdown-menu {
+        z-index: 1100;
+    }
+</style>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');
+            $('#logoid').addClass('hidden');
+            $('#hide').addClass('hidden');
+
+        }
+</script>
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+      
+        $('#hide').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getdepartment/' + id,
+            type: 'GET',
+            success: function (data) {
+               $('#hdnid').val(data.data.ID);            
+               $('#department_name').val(data.data.DEPARTMENT_NAME);
+               var user1 = data.data.userid;
+               var user2 = data.data.DEPARTMENT_NAME;
+               $("#user_id").append('<option selected style="color:black;" value="' + user1 + '">' + user2 + '</option>')
+            }
+        });
+    }
+</script>
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       department_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.stringify(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var dt = data.data.ID;
+
+                                $('#row_'+dt).hide();
+
+
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>
+
+
+

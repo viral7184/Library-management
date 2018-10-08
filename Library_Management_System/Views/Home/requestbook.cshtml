@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "requestbook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Request Book</h4>
+            </div>
+            <div class="modal-body">
+                <!-- /.box-header -->
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                    
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Book Name</label>
+                            <input type="text" class="form-control" name="BOOK_NAME" id="book_name" required placeholder="Enter Book Name">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Auther Name</label>
+                            <input type="text" class="form-control" name="AUTHER_NAME" id="auther_name"  placeholder="Enter Auther Name">
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+
+                    </div>
+
+
+                 
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <textarea  class="form-control" name="REMARK" id="remark" placeholder="Enter remark"></textarea>
+                            <!-- <span class="help-block error">* User Name Already Exist</span> -->
+                        </div>
+                   
+                    <div class="box-footer">
+                        <input type="hidden" id="hdnid" name="ID" />
+                        <input type="submit" class="btn btn-success pull-right" id="add" value="Add Requestbook" />
+                        <input type="submit" class="btn btn-success pull-right hidden" id="hide" value="Update Requestbook" />
+                    </div>
+                </form>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="box-header">
+    @*<h3 class="box-title">Register</h3>*@
+    <a data-toggle="modal" data-target="#myModal" onclick="OpenDialog2()" data-dismiss="modal" type="button" class="btn btn-primary" style="float: right;">New Request Book</a>
+</div>
+
+<div>
+    <table id="example" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Sr No</td>               
+                <td>Book Name</td>
+                <td>Auther Name</td>
+                <td>Request By</td>
+                <td>Remark</td>
+                <td class="hide_me">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in ViewBag.requestbook)
+            {
+
+                <tr id="row_@item.ID">
+                    <td>
+                        @i
+                    </td>
+
+                    <td>
+                        @item.BOOK_NAME
+                    </td>
+                    <td>
+                        @item.AUTHER_NAME
+                    </td>
+                    <td>
+                        @item.REQUEST_BY
+                    </td>                
+                    <td>
+                        @item.REMARK
+                    </td>
+
+                    <td>
+                        <a onclick="OpenDialog(@item.ID)" style="display:inline" data-toggle="modal" data-target="#myModal" type="button"> <i class="fa fa-edit"></i></a>
+                        <a style="display:inline" onclick="Delete(@item.ID,'del')"> &nbsp; <i class="fa fa-trash hide_me"></i> </a>
+                    </td>
+                </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .dropdown-menu {
+        z-index: 1100;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+
+<script>
+    function OpenDialog2()
+    {
+        document.getElementById("myForm").reset();
+            var pati = {
+
+            }
+            $('#hdnid').val(0);
+            $('#add').removeClass('hidden');
+         
+            $('#hide').addClass('hidden');
+
+        }
+</script>
+<script>
+    function OpenDialog(id) {
+        var pati = {
+            ID : id,
+        }
+        $('#add').addClass('hidden');
+        $('#logoid').addClass('hidden');
+        $('#hide').removeClass('hidden');
+        $.ajax({
+            url: '/Home/getrequestbook/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#hdnid').val(data.data.ID);               
+             
+                $('#book_name').val(data.data.BOOK_NAME);
+                $('#auther_name').val(data.data.AUTHER_NAME);
+                $('#remark').val(data.data.REMARK);
+            
+            }
+        });
+    }
+</script>
+
+<script>
+        function Delete(id,del)
+        {
+            if (confirm("Are you sure Delete this Record?")) {
+                var deletes =
+                   {
+                       ID : id,
+                       remark_del: del,
+                   }
+                {
+                    $.ajax({
+                        url: '/Home/delete/',
+                        data: JSON.stringify(deletes),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var dt = data.data.ID;
+
+                                $('#row_'+dt).hide();
+
+
+                        }
+                    });
+                    error: {
+
+                    }
+                }
+            }
+            return false;
+        }
+
+</script>
+
+
+

@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="library_m_Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOOK_NAME" Type="nvarchar" MaxLength="500" />
+          <Property Name="AUTHOR_NAME" Type="nvarchar" MaxLength="500" />
+          <Property Name="BOOK_CODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="GENRE" Type="int" />
+          <Property Name="LANGUAGE" Type="nvarchar" MaxLength="50" />
+          <Property Name="PRICE" Type="nvarchar" MaxLength="50" />
+          <Property Name="SUBMITTED_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="AVAILABLE" Type="nvarchar" MaxLength="50" />
+          <Property Name="IS_ACTIVE" Type="bit" />
+          <Property Name="IS_DELETE" Type="bit" />
+          <Property Name="ENT_DATE" Type="datetime" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DEPARTMENT_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="IS_DELETED" Type="bit" />
+        </EntityType>
+        <EntityType Name="issue_book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOOK_ID" Type="int" />
+          <Property Name="ISSUE_DATE" Type="datetime" />
+          <Property Name="EXPIRY_DATE" Type="datetime" />
+          <Property Name="ISSUEBOOK" Type="nvarchar" MaxLength="50" />
+          <Property Name="RETURN_DATE" Type="datetime" />
+          <Property Name="DELAY_CHARGES" Type="nvarchar" MaxLength="50" />
+          <Property Name="FEES" Type="nvarchar" MaxLength="50" />
+          <Property Name="USER_ID" Type="int" />
+          <Property Name="IS_RETURN" Type="bit" />
+          <Property Name="IS_DELETED" Type="bit" />
+        </EntityType>
+        <EntityType Name="registration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="nvarchar" MaxLength="500" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="500" />
+          <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" />
+          <Property Name="FEES" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADDRESS" Type="nvarchar(max)" />
+          <Property Name="PHONE_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="MEMBERSHIP_DURATION" Type="nvarchar" MaxLength="50" />
+          <Property Name="ENT_DATE" Type="datetime" />
+          <Property Name="RENEW_DATE" Type="datetime" />
+          <Property Name="RENEW_CHARGE" Type="nvarchar" MaxLength="50" />
+          <Property Name="IS_ACTIVE" Type="bit" />
+          <Property Name="IS_DELETE" Type="bit" />
+        </EntityType>
+        <EntityType Name="request_book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOOK_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="AUTHER_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="REQUEST_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="REMARK" Type="nvarchar" MaxLength="50" />
+          <Property Name="IS_DELETED" Type="bit" />
+          <Property Name="IS_AVAILABLE" Type="bit" />
+        </EntityType>
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER_ID" Type="int" />
+          <Property Name="USER_ROLE" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="IS_DELETED" Type="bit" />
+        </EntityType>
+        <Association Name="FK_book_ToTable">
+          <End Role="department" Type="Self.department" Multiplicity="0..1" />
+          <End Role="book" Type="Self.book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="book">
+              <PropertyRef Name="GENRE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issue_book_ToTable">
+          <End Role="book" Type="Self.book" Multiplicity="0..1" />
+          <End Role="issue_book" Type="Self.issue_book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="book">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="issue_book">
+              <PropertyRef Name="BOOK_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issue_book_ToTable_1">
+          <End Role="registration" Type="Self.registration" Multiplicity="0..1" />
+          <End Role="issue_book" Type="Self.issue_book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="issue_book">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_ToTable">
+          <End Role="registration" Type="Self.registration" Multiplicity="0..1" />
+          <End Role="user_role" Type="Self.user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="library_m_Database1ModelStoreContainer">
+          <EntitySet Name="book" EntityType="Self.book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="department" EntityType="Self.department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="issue_book" EntityType="Self.issue_book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registration" EntityType="Self.registration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="request_book" EntityType="Self.request_book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_role" EntityType="Self.user_role" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_book_ToTable" Association="Self.FK_book_ToTable">
+            <End Role="department" EntitySet="department" />
+            <End Role="book" EntitySet="book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issue_book_ToTable" Association="Self.FK_issue_book_ToTable">
+            <End Role="book" EntitySet="book" />
+            <End Role="issue_book" EntitySet="issue_book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issue_book_ToTable_1" Association="Self.FK_issue_book_ToTable_1">
+            <End Role="registration" EntitySet="registration" />
+            <End Role="issue_book" EntitySet="issue_book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_ToTable" Association="Self.FK_user_role_ToTable">
+            <End Role="registration" EntitySet="registration" />
+            <End Role="user_role" EntitySet="user_role" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="library_m_Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOOK_NAME" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AUTHOR_NAME" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BOOK_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GENRE" Type="Int32" />
+          <Property Name="LANGUAGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRICE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SUBMITTED_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AVAILABLE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IS_ACTIVE" Type="Boolean" />
+          <Property Name="IS_DELETE" Type="Boolean" />
+          <Property Name="ENT_DATE" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="department" Relationship="Self.FK_book_ToTable" FromRole="book" ToRole="department" />
+          <NavigationProperty Name="issue_book" Relationship="Self.FK_issue_book_ToTable" FromRole="book" ToRole="issue_book" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DEPARTMENT_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IS_DELETED" Type="Boolean" />
+          <NavigationProperty Name="books" Relationship="Self.FK_book_ToTable" FromRole="department" ToRole="book" />
+        </EntityType>
+        <EntityType Name="issue_book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOOK_ID" Type="Int32" />
+          <Property Name="ISSUE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EXPIRY_DATE" Type="DateTime" Precision="3" />
+          <Property Name="ISSUEBOOK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RETURN_DATE" Type="DateTime" Precision="3" />
+          <Property Name="DELAY_CHARGES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FEES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="USER_ID" Type="Int32" />
+          <Property Name="IS_RETURN" Type="Boolean" />
+          <Property Name="IS_DELETED" Type="Boolean" />
+          <NavigationProperty Name="book" Relationship="Self.FK_issue_book_ToTable" FromRole="issue_book" ToRole="book" />
+          <NavigationProperty Name="registration" Relationship="Self.FK_issue_book_ToTable_1" FromRole="issue_book" ToRole="registration" />
+        </EntityType>
+        <EntityType Name="registration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EMAIL" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FEES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PHONE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MEMBERSHIP_DURATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ENT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="RENEW_DATE" Type="DateTime" Precision="3" />
+          <Property Name="RENEW_CHARGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IS_ACTIVE" Type="Boolean" />
+          <Property Name="IS_DELETE" Type="Boolean" />
+          <NavigationProperty Name="issue_book" Relationship="Self.FK_issue_book_ToTable_1" FromRole="registration" ToRole="issue_book" />
+          <NavigationProperty Name="user_role" Relationship="Self.FK_user_role_ToTable" FromRole="registration" ToRole="user_role" />
+        </EntityType>
+        <EntityType Name="request_book">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOOK_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AUTHER_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="REQUEST_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="REMARK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IS_DELETED" Type="Boolean" />
+          <Property Name="IS_AVAILABLE" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USER_ID" Type="Int32" />
+          <Property Name="USER_ROLE1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DATE" Type="DateTime" Precision="3" />
+          <Property Name="IS_DELETED" Type="Boolean" />
+          <NavigationProperty Name="registration" Relationship="Self.FK_user_role_ToTable" FromRole="user_role" ToRole="registration" />
+        </EntityType>
+        <Association Name="FK_book_ToTable">
+          <End Role="department" Type="Self.department" Multiplicity="0..1" />
+          <End Role="book" Type="Self.book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="book">
+              <PropertyRef Name="GENRE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issue_book_ToTable">
+          <End Role="book" Type="Self.book" Multiplicity="0..1" />
+          <End Role="issue_book" Type="Self.issue_book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="book">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="issue_book">
+              <PropertyRef Name="BOOK_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issue_book_ToTable_1">
+          <End Role="registration" Type="Self.registration" Multiplicity="0..1" />
+          <End Role="issue_book" Type="Self.issue_book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="issue_book">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_ToTable">
+          <End Role="registration" Type="Self.registration" Multiplicity="0..1" />
+          <End Role="user_role" Type="Self.user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role">
+              <PropertyRef Name="USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="library_m_Database1Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="books" EntityType="Self.book" />
+          <EntitySet Name="departments" EntityType="Self.department" />
+          <EntitySet Name="issue_book" EntityType="Self.issue_book" />
+          <EntitySet Name="registrations" EntityType="Self.registration" />
+          <EntitySet Name="request_book" EntityType="Self.request_book" />
+          <EntitySet Name="user_role" EntityType="Self.user_role" />
+          <AssociationSet Name="FK_book_ToTable" Association="Self.FK_book_ToTable">
+            <End Role="department" EntitySet="departments" />
+            <End Role="book" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issue_book_ToTable" Association="Self.FK_issue_book_ToTable">
+            <End Role="book" EntitySet="books" />
+            <End Role="issue_book" EntitySet="issue_book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issue_book_ToTable_1" Association="Self.FK_issue_book_ToTable_1">
+            <End Role="registration" EntitySet="registrations" />
+            <End Role="issue_book" EntitySet="issue_book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_ToTable" Association="Self.FK_user_role_ToTable">
+            <End Role="registration" EntitySet="registrations" />
+            <End Role="user_role" EntitySet="user_role" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="library_m_Database1ModelStoreContainer" CdmEntityContainer="library_m_Database1Entities1">
+          <EntitySetMapping Name="books">
+            <EntityTypeMapping TypeName="library_m_Database1Model.book">
+              <MappingFragment StoreEntitySet="book">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOOK_NAME" ColumnName="BOOK_NAME" />
+                <ScalarProperty Name="AUTHOR_NAME" ColumnName="AUTHOR_NAME" />
+                <ScalarProperty Name="BOOK_CODE" ColumnName="BOOK_CODE" />
+                <ScalarProperty Name="GENRE" ColumnName="GENRE" />
+                <ScalarProperty Name="LANGUAGE" ColumnName="LANGUAGE" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+                <ScalarProperty Name="SUBMITTED_BY" ColumnName="SUBMITTED_BY" />
+                <ScalarProperty Name="AVAILABLE" ColumnName="AVAILABLE" />
+                <ScalarProperty Name="IS_ACTIVE" ColumnName="IS_ACTIVE" />
+                <ScalarProperty Name="IS_DELETE" ColumnName="IS_DELETE" />
+                <ScalarProperty Name="ENT_DATE" ColumnName="ENT_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="departments">
+            <EntityTypeMapping TypeName="library_m_Database1Model.department">
+              <MappingFragment StoreEntitySet="department">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DEPARTMENT_NAME" ColumnName="DEPARTMENT_NAME" />
+                <ScalarProperty Name="IS_DELETED" ColumnName="IS_DELETED" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="issue_book">
+            <EntityTypeMapping TypeName="library_m_Database1Model.issue_book">
+              <MappingFragment StoreEntitySet="issue_book">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOOK_ID" ColumnName="BOOK_ID" />
+                <ScalarProperty Name="ISSUE_DATE" ColumnName="ISSUE_DATE" />
+                <ScalarProperty Name="EXPIRY_DATE" ColumnName="EXPIRY_DATE" />
+                <ScalarProperty Name="ISSUEBOOK" ColumnName="ISSUEBOOK" />
+                <ScalarProperty Name="RETURN_DATE" ColumnName="RETURN_DATE" />
+                <ScalarProperty Name="DELAY_CHARGES" ColumnName="DELAY_CHARGES" />
+                <ScalarProperty Name="FEES" ColumnName="FEES" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="IS_RETURN" ColumnName="IS_RETURN" />
+                <ScalarProperty Name="IS_DELETED" ColumnName="IS_DELETED" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registrations">
+            <EntityTypeMapping TypeName="library_m_Database1Model.registration">
+              <MappingFragment StoreEntitySet="registration">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="FEES" ColumnName="FEES" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="PHONE_NO" ColumnName="PHONE_NO" />
+                <ScalarProperty Name="MEMBERSHIP_DURATION" ColumnName="MEMBERSHIP_DURATION" />
+                <ScalarProperty Name="ENT_DATE" ColumnName="ENT_DATE" />
+                <ScalarProperty Name="RENEW_DATE" ColumnName="RENEW_DATE" />
+                <ScalarProperty Name="RENEW_CHARGE" ColumnName="RENEW_CHARGE" />
+                <ScalarProperty Name="IS_ACTIVE" ColumnName="IS_ACTIVE" />
+                <ScalarProperty Name="IS_DELETE" ColumnName="IS_DELETE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="request_book">
+            <EntityTypeMapping TypeName="library_m_Database1Model.request_book">
+              <MappingFragment StoreEntitySet="request_book">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOOK_NAME" ColumnName="BOOK_NAME" />
+                <ScalarProperty Name="AUTHER_NAME" ColumnName="AUTHER_NAME" />
+                <ScalarProperty Name="REQUEST_BY" ColumnName="REQUEST_BY" />
+                <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+                <ScalarProperty Name="IS_DELETED" ColumnName="IS_DELETED" />
+                <ScalarProperty Name="IS_AVAILABLE" ColumnName="IS_AVAILABLE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_role">
+            <EntityTypeMapping TypeName="library_m_Database1Model.user_role">
+              <MappingFragment StoreEntitySet="user_role">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="USER_ROLE1" ColumnName="USER_ROLE" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="IS_DELETED" ColumnName="IS_DELETED" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
